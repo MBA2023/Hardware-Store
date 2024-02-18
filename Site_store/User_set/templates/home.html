@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">Автор</a>
+              <small class="text-muted">Дата</small>
+            </div>
+            <h2><a class="article-title" href="#">Приветствие</a></h2>
+            <p class="article-content">Приветственная речь</p>
+          </div>
+        </article>
+{% endblock content %}
