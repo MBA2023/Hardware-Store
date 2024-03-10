@@ -8,21 +8,35 @@ class LoginForm(forms.Form):
 
 
 class UserRegistrationForm(forms.ModelForm):
-    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    username = forms.CharField(error_messages={"unique": "Пользователь с таким именем уже существует."},
+                               label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     first_name = forms.CharField(label='Имя', widget=forms.TextInput(attrs={'class': 'form-input'}))
     last_name = forms.CharField(label='Фамилия', widget=forms.TextInput(attrs={'class': 'form-input'}))
-    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-input'}))
+    email = forms.EmailField(error_messages={"invalid": "Введите корректный адрес эл. почты."},
+                             label='Email', widget=forms.EmailInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
+    # class Meta:
+    #     model = User
+    #     fields = ('username', 'first_name', 'last_name')
+    #     labels = {
+    #         'username': 'Writer',
+    #     }
+    #     help_texts = {
+    #         'username': 'Some useful help text.',
+    #     }
+    #     error_messages = {
+    #         'username': {
+    #             "unique": "A user with that username6555 already exists.",
+    #         },
+    #     }
 
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Пароли не совпадают')
         return cd['password2']
-
-
