@@ -2,10 +2,6 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm, UserRegistrationForm
-
-
-def home(request):
-    return render(request, 'home.html')
 # Create your views here.
 
 
@@ -42,3 +38,4 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'users_set/reg.html', {'user_form': user_form})
+
