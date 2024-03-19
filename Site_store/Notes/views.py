@@ -1,21 +1,6 @@
 from django.shortcuts import render
 from .models import Notes
 
-notes = [
-	{
-    	'author': 'Администратор',
-    	'title': 'Это первый пост',
-    	'content': 'Содержание первого поста.',
-    	'date_posted': '12 мая, 2022'
-	},
-	{
-    	'author': 'Пользователь',
-    	'title': 'Это второй пост',
-    	'content': 'Подробное содержание второго поста.',
-    	'date_posted': '13 мая, 2022'
-	}
-]
-
 
 def home(request):
     context = {
@@ -25,4 +10,4 @@ def home(request):
 
 
 def about(request):
-    return render(request, 'about.html', {'title': 'О клубе Python Bytes'})
+    return render(request, 'about.html', {'title': 'О магазине PROASS'})

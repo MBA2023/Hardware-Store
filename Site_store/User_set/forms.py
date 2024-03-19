@@ -20,20 +20,6 @@ class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
-    # class Meta:
-    #     model = User
-    #     fields = ('username', 'first_name', 'last_name')
-    #     labels = {
-    #         'username': 'Writer',
-    #     }
-    #     help_texts = {
-    #         'username': 'Some useful help text.',
-    #     }
-    #     error_messages = {
-    #         'username': {
-    #             "unique": "A user with that username6555 already exists.",
-    #         },
-    #     }
 
     def clean_password2(self):
         cd = self.cleaned_data
