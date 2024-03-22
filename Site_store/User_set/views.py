@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm, UserRegistrationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as logout_2
 
 
 def user_login(request):
@@ -15,7 +16,8 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse('Вход выполнен')
+                    messages.success(request, f'Выполнен вход в систему {user}!')
+                    return redirect('store-home')
                 else:
                     return HttpResponse('Несуществующий аккаунт')
             else:
@@ -44,3 +46,11 @@ def register(request):
     return render(request, 'users_set/reg.html', {'user_form': user_form})
 
 
+def logout(request):
+    logout_2(request)
+    return render(request, 'users_set/logout.html')
+
+
+@login_required
+def profile(request):
+    return render(request, 'users_set/profile.html')
