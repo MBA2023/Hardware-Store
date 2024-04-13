@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="form-group">
+                <a href="{% url 'note-create' %}"><button class="btn btn-outline-info" type="submit">Новая заметка</button></a>
+</div>
     {% for note in notes %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ note.author }}</a>
               <small class="text-muted">{{ note.date_posted }}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ note.title }}</a></h2>
+            <h2><a class="article-title">{{ note.title }}</a></h2>
             <p class="article-content">{{ note.content }}</p>
           </div>
         </article>

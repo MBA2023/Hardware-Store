@@ -1,17 +1,74 @@
 from django.shortcuts import render
 from .models import Notes
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 
 
 def home(request):
     return render(request, 'home.html')
 
+
 def about(request):
     return render(request, 'about.html', {'title': 'О магазине PROASS'})
+
 
 @login_required
 def notes(request):
     context = {
-        'notes': Notes.objects.filter(author=request.user)
+        'notes': Notes.objects.filter(user=request.user)
     }
     return render(request, 'my_notes.html', context)
+
+
+# class NoteListView(ListView):
+#     model = Notes
+#     template_name = 'my_notes.html'
+#     context_object_name = 'Notes'
+#     ordering = ['-date_posted']
+#
+#
+# class NoteDetailView(DetailView):
+#     model = Notes
+
+
+class NoteCreateView(LoginRequiredMixin, CreateView):
+    model = Notes
+    template_name = 'note_form.html'
+    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+# class NoteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Notes
+#     fields = ['title', 'content']
+#
+#     def form_valid(self, form):
+#         form.instance.user = self.request.user
+#         return super().form_valid(form)
+#
+#     def test_func(self):
+#         note = self.get_object()
+#         if self.request.user == note.user:
+#             return True
+#         return False
+#
+#
+# class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+#     model = Notes
+#     success_url = '/'
+#
+#     def test_func(self):
+#         note = self.get_object()
+#         if self.request.user == note.user:
+#             return True
+#         return False
