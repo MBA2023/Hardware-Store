@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Notes
+from .forms import NewNoteForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -43,9 +44,14 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
     template_name = 'note_form.html'
     fields = ['title', 'content']
 
+    def get_form_class(self):
+        return NewNoteForm
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
 
 
 # class NoteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
