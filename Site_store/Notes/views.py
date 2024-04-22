@@ -10,6 +10,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 
 def home(request):
@@ -35,8 +37,9 @@ def notes(request):
 #     ordering = ['-date_posted']
 #
 #
-# class NoteDetailView(DetailView):
-#     model = Notes
+class NoteDetailView(DetailView):
+    model = Notes
+    template_name = 'note_detail.html'
 
 
 class NoteCreateView(LoginRequiredMixin, CreateView):
@@ -52,29 +55,35 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class NoteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Notes
+    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        note = self.get_object()
+        if self.request.user == note.user:
+            return True
+        return False
 
 
-# class NoteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     model = Notes
-#     fields = ['title', 'content']
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
-#
-#     def test_func(self):
-#         note = self.get_object()
-#         if self.request.user == note.user:
-#             return True
-#         return False
-#
-#
-# class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-#     model = Notes
-#     success_url = '/'
-#
-#     def test_func(self):
-#         note = self.get_object()
-#         if self.request.user == note.user:
-#             return True
-#         return False
+class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Notes
+    success_url = '/notes/'
+    template_name = 'note_confirm_delete.html'
+
+    # def delete(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     success_url = self.get_success_url()
+    #     self.object.delete()
+    #     messages.success(self.request, 'Note successfully deleted!')
+    #     return HttpResponseRedirect(success_url)
+
+    def test_func(self):
+        note = self.get_object()
+        if self.request.user == note.user:
+            return True
+        return False
